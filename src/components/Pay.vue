@@ -15,7 +15,7 @@
               </v-layout>
               <v-layout align-center justify-center>
                 <v-subheader>每份页数：{{numPages}}页</v-subheader>
-                <v-subheader>打印份数：{{numPages}}份</v-subheader>
+                <v-subheader>打印份数：{{copyCount}}份</v-subheader>
               </v-layout>
               <p class="title text-xs-center">需要支付{{totalPrice}}元</p>
               <p class="text-xs-center red--text">请务必在支付时备注订单号！</p>
@@ -63,7 +63,7 @@ export default {
   methods: {
     onSuccess() {
       fly
-        .post("http://127.0.0.1:5000/pay", { order_id: this.orderId })
+        .post("http://rucprint.cn:5000/pay", { order_id: this.orderId })
         .then(result => {
           this.$router.replace("success");
         });

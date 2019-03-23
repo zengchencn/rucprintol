@@ -347,7 +347,7 @@ export default {
       }
       let self = this;
       fly
-        .post("http://127.0.0.1:5000/order", {
+        .post("http://rucprint.cn:5000/order", {
           customer_name: this.customerName,
           customer_phone: this.customerPhone,
           customer_building_name: this.buildingName,
@@ -368,7 +368,7 @@ export default {
           let o_id = res.data.order_id;
           form.append("order_id", o_id);
           form.append("file", self.file);
-          fly.post("http://127.0.0.1:5000/upload", form).then(res2 => {
+          fly.post("http://rucprint.cn:5000/upload", form).then(res2 => {
             console.log(res2.data);
             self.$router.replace({
               name: "pay",
