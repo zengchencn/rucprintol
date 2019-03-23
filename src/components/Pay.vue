@@ -63,7 +63,7 @@ export default {
   methods: {
     onSuccess() {
       fly
-        .post("http://rucprint.cn:5000/pay", { order_id: this.orderId })
+        .post("https://rucprint.cn/api/pay", { order_id: this.orderId })
         .then(result => {
           this.$router.replace("success");
         });

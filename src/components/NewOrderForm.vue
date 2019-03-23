@@ -9,7 +9,7 @@
             </v-toolbar>
             <v-card-text>
               <v-subheader>收件人信息</v-subheader>
-              <v-form>
+              <v-form ref="form" lazy-validation v-model="valid">
                 <v-text-field
                   prepend-icon="person"
                   name="login"
@@ -62,7 +62,12 @@
               <v-subheader>打印文件信息</v-subheader>
               <v-layout>
                 <v-flex xs8 sm8 md10 d-inline-flex>
-                  <v-text-field prepend-icon="folder" v-model="fileName" label="文件名" readonly></v-text-field>
+                  <v-text-field
+                    prepend-icon="folder"
+                    v-model="fileName"
+                    label="打印文件（<50M）"
+                    readonly
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs4 sm4 md2 d-inline-flex>
                   <upload-btn
@@ -71,6 +76,7 @@
                     title="浏览"
                     :fileChangedCallback="fileChanged"
                     ripple
+                    accept="application/pdf"
                   ></upload-btn>
                 </v-flex>
               </v-layout>
@@ -146,6 +152,10 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="snackbar" color="error" :timeout="5000">
+      {{sbtext}}
+      <v-btn dark flat @click="snackbar = false">好</v-btn>
+    </v-snackbar>
   </v-content>
 </template>
 
@@ -158,7 +168,10 @@ export default {
     "upload-btn": UploadButton
   },
   data: () => ({
+    valid: true,
     drawer: null,
+    snackbar: false,
+    sbtext: "",
     customerName: "",
     customerPhone: "",
     locations: ["品园", "知行", "东风"],
@@ -329,9 +342,21 @@ export default {
   },
   methods: {
     fileChanged(file) {
-      this.file = file;
+      if (file.size > 50 * 1024 * 1024) {
+        this.sbtext = "文件大于50M，请先压缩";
+        this.snackbar = true;
+        this.file = null;
+      } else this.file = file;
     },
     onNavigateNext() {
+      //先验证表单
+      if (!this.$refs.form.validate()) return;
+      else if (!this.file) {
+        this.sbtext = "请选择文件";
+        this.snackbar = true;
+        return;
+      }
+      //再提交请求
       if (this.saveAddr) {
         this.$cookie.set("name", this.customerName, 180);
         this.$cookie.set("phone", this.customerPhone, 180);
@@ -347,7 +372,7 @@ export default {
       }
       let self = this;
       fly
-        .post("http://rucprint.cn:5000/order", {
+        .post("https://rucprint.cn/api/order", {
           customer_name: this.customerName,
           customer_phone: this.customerPhone,
           customer_building_name: this.buildingName,
@@ -368,7 +393,7 @@ export default {
           let o_id = res.data.order_id;
           form.append("order_id", o_id);
           form.append("file", self.file);
-          fly.post("http://rucprint.cn:5000/upload", form).then(res2 => {
+          fly.post("https://rucprint.cn/api/upload", form).then(res2 => {
             console.log(res2.data);
             self.$router.replace({
               name: "pay",
