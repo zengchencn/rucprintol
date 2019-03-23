@@ -22,15 +22,15 @@
               <v-tabs centered grow>
                 <v-tab>微信支付</v-tab>
                 <v-tab-item>
-                  <v-img :src="require('@/assets/wxp.png')"></v-img>
+                  <img :src="require('@/assets/wxp.png')" style="width: 100%">
                 </v-tab-item>
                 <v-tab>支付宝</v-tab>
                 <v-tab-item>
-                  <v-img :src="require('@/assets/alipay.png')"></v-img>
+                  <img :src="require('@/assets/alipay.png')" style="width: 100%">
                 </v-tab-item>
                 <v-tab>支付宝红包</v-tab>
                 <v-tab-item>
-                  <v-img :src="require('@/assets/alipay_rp.png')"></v-img>
+                  <img :src="require('@/assets/alipay_rp.png')" style="width: 100%">
                 </v-tab-item>
               </v-tabs>
             </v-card-text>
