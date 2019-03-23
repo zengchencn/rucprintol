@@ -65,7 +65,7 @@
                   <v-text-field
                     prepend-icon="folder"
                     v-model="fileName"
-                    label="打印文件（<50M）"
+                    label="打印文件（<200M）"
                     readonly
                   ></v-text-field>
                 </v-flex>
@@ -142,7 +142,14 @@
                 <v-checkbox label="保存地址以供下次使用" v-model="saveAddr"></v-checkbox>
               </v-flex>
               <v-flex xs2 sm2 md2 offset-xs1>
-                <v-btn color="primary" round block @click="onNavigateNext">
+                <v-btn
+                  color="primary"
+                  round
+                  block
+                  @click="onNavigateNext"
+                  :disabled="navDisabled"
+                  :loading="navDisabled"
+                >
                   <v-icon>navigate_next</v-icon>
                 </v-btn>
               </v-flex>
@@ -171,6 +178,7 @@ export default {
     valid: true,
     drawer: null,
     snackbar: false,
+    navDisabled: false,
     sbtext: "",
     customerName: "",
     customerPhone: "",
@@ -342,7 +350,7 @@ export default {
   },
   methods: {
     fileChanged(file) {
-      if (file.size > 50 * 1024 * 1024) {
+      if (file.size > 200 * 1024 * 1024) {
         this.sbtext = "文件大于50M，请先压缩";
         this.snackbar = true;
         this.file = null;
@@ -371,6 +379,7 @@ export default {
         this.$cookie.delete("room_number");
       }
       let self = this;
+      this.navDisabled = true;
       fly
         .post("https://rucprint.cn/api/order", {
           customer_name: this.customerName,
