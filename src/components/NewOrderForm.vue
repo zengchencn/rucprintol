@@ -363,6 +363,14 @@ export default {
         this.sbtext = "请选择文件";
         this.snackbar = true;
         return;
+      } else {
+        var index = this.fileName.lastIndexOf(".");
+        if (this.fileName.substr(index + 1) != "pdf") {
+          this.sbtext = "请上传PDF格式文件";
+          this.snackbar = true;
+          this.file = null;
+          return;
+        }
       }
       //再提交请求
       if (this.saveAddr) {
