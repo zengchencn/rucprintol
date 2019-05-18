@@ -17,6 +17,7 @@
                 <v-subheader>每份页数：{{numPages}}页</v-subheader>
                 <v-subheader>打印份数：{{copyCount}}份</v-subheader>
               </v-layout>
+              <p class="text-xs-center red--text" :v-if="promo">以下价格已经应用折扣（装订不参加折扣）</p>
               <p class="title text-xs-center">需要支付{{totalPrice}}元</p>
               <p class="text-xs-center red--text">请务必在支付时备注订单号！</p>
               <v-tabs centered grow>
@@ -47,7 +48,7 @@
 </template>
 
 <script>
-var fly = require("flyio");
+var fly = require('flyio')
 
 export default {
   data() {
@@ -57,17 +58,18 @@ export default {
       bindingPrice: this.$route.params.bindingprice,
       numPages: this.$route.params.numpages,
       copyCount: this.$route.params.copycount,
-      totalPrice: this.$route.params.totalprice
-    };
+      totalPrice: this.$route.params.totalprice,
+      promo: this.$route.params.promo
+    }
   },
   methods: {
     onSuccess() {
       fly
-        .post("https://rucprint.cn/api/pay", { order_id: this.orderId })
+        .post('https://rucprint.cn/api/pay', { order_id: this.orderId })
         .then(result => {
-          this.$router.replace("success");
-        });
+          this.$router.replace('success')
+        })
     }
   }
-};
+}
 </script>
