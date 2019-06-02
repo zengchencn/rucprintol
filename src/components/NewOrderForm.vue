@@ -212,7 +212,7 @@ export default {
     paperBinding: '无装订',
     paperColor: '黑白',
     paperSigDbl: '单面',
-    shareOption: '不共享',
+    shareOption: '共享85折',
     pptOption: '不作为PPT打印',
     rules: {
       required: value => !!value || '请填写该项',
